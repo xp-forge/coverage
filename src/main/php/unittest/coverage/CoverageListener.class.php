@@ -11,7 +11,7 @@ use unittest\TestResult;
  * @ext   xdebug
  */
 class CoverageListener implements \unittest\TestListener {
-  private $paths= array();
+  private $paths= [];
   private $reportFile= 'coverage.html';
   private $coverage= null;
 
