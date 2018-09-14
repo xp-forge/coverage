@@ -8,7 +8,7 @@
   "require" : {
     "xp-framework/core": "^9.0 | ^8.0 | ^7.0",
     "xp-framework/unittest": "^9.0 | ^8.0 |^7.0",
-    "phpunit/php-code-coverage": "^6.0",
+    "phpunit/php-code-coverage": "^6.0 | ^5.3",
     "php": ">=7.0.0"
   },
   "autoload" : {
