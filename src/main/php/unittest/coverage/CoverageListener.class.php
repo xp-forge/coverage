@@ -142,12 +142,9 @@ class CoverageListener implements TestListener {
     $this->coverage->stop();
 
     if (null !== $this->cloverFile) {
-      $cloverWriter= new Clover();
-      $cloverWriter->process($this->coverage, $this->cloverFile);
+      (new Clover())->process($this->coverage, $this->cloverFile);
     }
 
-    $htmlWriter= new Facade();
-    $htmlWriter->process($this->coverage, $this->htmlReportDirectory);
-    return;
+    (new Facade())->process($this->coverage, $this->htmlReportDirectory);
   }
 }
