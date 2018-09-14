@@ -1,16 +1,19 @@
 <?php namespace unittest\coverage;
 
 use SebastianBergmann\CodeCoverage\CodeCoverage;
+use SebastianBergmann\CodeCoverage\Report\Clover;
+use SebastianBergmann\CodeCoverage\Report\Html\Facade;
 use lang\Runtime;
 use unittest\PrerequisitesNotMetError;
-use unittest\TestResult;
+use unittest\{TestResult, TestWarning, TestFailure, TestError, TestSkipped, TestSuccess, TestSuite, TestCase, TestListener};
 
 /**
  * Coverage listener
  *
  * @ext   xdebug
+ * @test  xp://unittest.coverage.tests.CoverageListenerTest
  */
-class CoverageListener implements \unittest\TestListener {
+class CoverageListener implements TestListener {
   private $paths= [];
   private $cloverFile= null;
   private $htmlReportDirectory= './code-coverage-report';
@@ -48,7 +51,7 @@ class CoverageListener implements \unittest\TestListener {
       throw new PrerequisitesNotMetError('code coverage not available. Please install the xdebug extension.');
     }
 
-    $this->coverage = new CodeCoverage;
+    $this->coverage = new CodeCoverage();
   }
 
   /**
@@ -56,7 +59,7 @@ class CoverageListener implements \unittest\TestListener {
    *
    * @param   unittest.TestCase failure
    */
-  public function testStarted(\unittest\TestCase $case) {
+  public function testStarted(TestCase $case) {
     // Empty
   }
 
@@ -65,7 +68,7 @@ class CoverageListener implements \unittest\TestListener {
    *
    * @param   unittest.TestFailure failure
    */
-  public function testFailed(\unittest\TestFailure $failure) {
+  public function testFailed(TestFailure $failure) {
     // Empty
   }
 
@@ -74,7 +77,7 @@ class CoverageListener implements \unittest\TestListener {
    *
    * @param   unittest.TestFailure error
    */
-  public function testError(\unittest\TestError $error) {
+  public function testError(TestError $error) {
     // Empty
   }
 
@@ -83,7 +86,7 @@ class CoverageListener implements \unittest\TestListener {
    *
    * @param   unittest.TestWarning warning
    */
-  public function testWarning(\unittest\TestWarning $warning) {
+  public function testWarning(TestWarning $warning) {
     // Empty
   }
 
@@ -92,7 +95,7 @@ class CoverageListener implements \unittest\TestListener {
    *
    * @param   unittest.TestSuccess success
    */
-  public function testSucceeded(\unittest\TestSuccess $success) {
+  public function testSucceeded(TestSuccess $success) {
     // Empty
   }
 
@@ -102,7 +105,7 @@ class CoverageListener implements \unittest\TestListener {
    *
    * @param   unittest.TestSkipped skipped
    */
-  public function testSkipped(\unittest\TestSkipped $skipped) {
+  public function testSkipped(TestSkipped $skipped) {
     // Empty
   }
 
@@ -112,7 +115,7 @@ class CoverageListener implements \unittest\TestListener {
    *
    * @param   unittest.TestSkipped ignore
    */
-  public function testNotRun(\unittest\TestSkipped $ignore) {
+  public function testNotRun(TestSkipped $ignore) {
     // Empty
   }
 
@@ -121,7 +124,7 @@ class CoverageListener implements \unittest\TestListener {
    *
    * @param   unittest.TestSuite suite
    */
-  public function testRunStarted(\unittest\TestSuite $suite) {
+  public function testRunStarted(TestSuite $suite) {
     foreach ($this->paths as $path) {
       $this->coverage->filter()->addDirectoryToWhitelist($path);
     }
@@ -135,15 +138,15 @@ class CoverageListener implements \unittest\TestListener {
    * @param   unittest.TestSuite suite
    * @param   unittest.TestResult result
    */
-  public function testRunFinished(\unittest\TestSuite $suite, TestResult $result) {
+  public function testRunFinished(TestSuite $suite, TestResult $result) {
     $this->coverage->stop();
 
     if (!is_null($this->cloverFile )) {
-      $cloverWriter = new \SebastianBergmann\CodeCoverage\Report\Clover;
+      $cloverWriter = new Clover();
       $cloverWriter->process($this->coverage, $this->cloverFile);
     }
 
-    $htmlWriter = new \SebastianBergmann\CodeCoverage\Report\Html\Facade;
+    $htmlWriter = new Facade();
     $htmlWriter->process($this->coverage, $this->htmlReportDirectory);
 
     return;
