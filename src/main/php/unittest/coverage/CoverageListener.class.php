@@ -141,14 +141,13 @@ class CoverageListener implements TestListener {
   public function testRunFinished(TestSuite $suite, TestResult $result) {
     $this->coverage->stop();
 
-    if (!is_null($this->cloverFile )) {
-      $cloverWriter = new Clover();
+    if (null !== $this->cloverFile) {
+      $cloverWriter= new Clover();
       $cloverWriter->process($this->coverage, $this->cloverFile);
     }
 
-    $htmlWriter = new Facade();
+    $htmlWriter= new Facade();
     $htmlWriter->process($this->coverage, $this->htmlReportDirectory);
-
     return;
   }
 }
