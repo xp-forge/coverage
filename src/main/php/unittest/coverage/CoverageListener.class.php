@@ -1,9 +1,9 @@
 <?php namespace unittest\coverage;
 
-use SebastianBergmann\CodeCoverage\CodeCoverage;
-use lang\Runtime;
-use unittest\PrerequisitesNotMetError;
 use unittest\TestResult;
+use unittest\PrerequisitesNotMetError;
+use lang\Runtime;
+use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 /**
  * Coverage listener
@@ -12,7 +12,8 @@ use unittest\TestResult;
  */
 class CoverageListener implements \unittest\TestListener {
   private $paths= array();
-  private $reportFile= 'coverage.html';
+  private $cloverFile= null;
+  private $htmlReportDirectory= './code-coverage-report';
   private $coverage= null;
 
   /**
@@ -23,6 +24,18 @@ class CoverageListener implements \unittest\TestListener {
   #[@arg]
   public function setRegisterPath($path) {
     $this->paths[]= $path;
+  }
+
+  /** Set directory to write html report to. */
+  #[@arg]
+  public function setHtmlReportDirectory(string $htmlReportDirectory) {
+    $this->htmlReportDirectory= $htmlReportDirectory;
+  }
+
+  /** Write clover report to specified file. */
+  #[@arg]
+  public function setCloverFile(string $cloverFile) {
+    $this->cloverFile= $cloverFile;
   }
 
   /**
@@ -125,11 +138,13 @@ class CoverageListener implements \unittest\TestListener {
   public function testRunFinished(\unittest\TestSuite $suite, TestResult $result) {
     $this->coverage->stop();
 
-    $writer = new \SebastianBergmann\CodeCoverage\Report\Clover;
-    $writer->process($this->coverage, './clover.xml');
+    if (!is_null($this->cloverFile )) {
+      $cloverWriter = new \SebastianBergmann\CodeCoverage\Report\Clover;
+      $cloverWriter->process($this->coverage, $this->cloverFile);
+    }
 
-    $writer = new \SebastianBergmann\CodeCoverage\Report\Html\Facade;
-    $writer->process($this->coverage, './code-coverage-report');
+    $htmlWriter = new \SebastianBergmann\CodeCoverage\Report\Html\Facade;
+    $htmlWriter->process($this->coverage, $this->htmlReportDirectory);
 
     return;
   }
