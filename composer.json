@@ -1,0 +1,17 @@
+{
+  "name" : "xp-forge/coverage",
+  "type" : "library",
+  "homepage" : "http://xp-framework.net/",
+  "license" : "BSD-3-Clause",
+  "description" : "Coverage for the XP Framework",
+  "keywords": ["module", "xp"],
+  "require" : {
+    "xp-framework/core": "^9.0 | ^8.0 | ^7.0",
+    "xp-framework/unittest": "^9.0 | ^8.0 |^7.0",
+    "phpunit/php-code-coverage": "^6.0",
+    "php": ">=7.0.0"
+  },
+  "autoload" : {
+    "files" : ["src/main/php/autoload.php"]
+  }
+}

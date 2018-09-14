@@ -1,0 +1,6 @@
+Coverage change log
+===================
+
+## ?.?.? / ????-??-??
+
+* Hello World! First release - @thekid
