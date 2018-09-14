@@ -3,4 +3,6 @@ Coverage change log
 
 ## ?.?.? / ????-??-??
 
-* Hello World! First release - @thekid
+## 0.1.0 / 2018-09-14
+
+* Hello World! First release - @OlafSeng
