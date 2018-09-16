@@ -4,8 +4,8 @@ use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Report\Clover;
 use SebastianBergmann\CodeCoverage\Report\Html\Facade;
 use lang\Runtime;
-use unittest\PrerequisitesNotMetError;
-use unittest\{TestResult, TestWarning, TestFailure, TestError, TestSkipped, TestSuccess, TestSuite, TestCase, TestListener};
+use unittest\{PrerequisitesNotMetError, TestSuite, TestCase, TestListener};
+use unittest\{TestResult, TestWarning, TestFailure, TestError, TestSkipped, TestSuccess};
 
 /**
  * Coverage listener
@@ -51,7 +51,7 @@ class CoverageListener implements TestListener {
       throw new PrerequisitesNotMetError('code coverage not available. Please install the xdebug extension.');
     }
 
-    $this->coverage = new CodeCoverage();
+    $this->coverage= new CodeCoverage();
   }
 
   /**
