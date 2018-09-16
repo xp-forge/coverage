@@ -1,4 +1,4 @@
-Code coverage for the XP Framework unittest
+Code coverage for XP Framework unittests
 ========================================================================
 
 [![Build Status on TravisCI](https://secure.travis-ci.org/xp-forge/coverage.png)](http://travis-ci.org/xp-forge/coverage)
