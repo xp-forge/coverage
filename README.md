@@ -13,8 +13,8 @@ Example
 -------
 
 ```bash
-$ xp test -l unittest.coverage.CoverageListener - -o registerpath src/main/php src/test/php
+$ xp coverage -p src/main/php src/test/php
 # ...
 ```
 
-Now open ./code-coverage-report/index.html in your browser
+Now open *./code-coverage-report/index.html* in your browser
