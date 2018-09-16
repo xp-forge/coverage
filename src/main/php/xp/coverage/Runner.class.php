@@ -46,7 +46,7 @@ class Runner {
     }
 
     try {
-      XPClass::forName('xp.unittest.TestRunner')->getMethod('main')->invoke(null, [$pass]);
+      return XPClass::forName('xp.unittest.TestRunner')->getMethod('main')->invoke(null, [$pass]);
     } catch (TargetInvocationException $e) {
       Console::$err->writeLine($e->getCause());
       return 2;
