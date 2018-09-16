@@ -2,6 +2,11 @@
 
 use unittest\metrics\Metric;
 
+/**
+ * Covered lines metric
+ *
+ * @test  xp://unittest.coverage.tests.CoveredLinesTest
+ */
 class CoveredLines extends Metric {
   private $coverage, $executed, $executable;
 
