@@ -5,7 +5,7 @@ use lang\{XPClass, Throwable};
 use util\cmd\Console;
 
 /**
- * Runs unittests, measures coverage and displays a summary
+ * Runs unittests, measures coverage and generates a report
  * ========================================================================
  *
  * - Runs tests in src/test/php, measuring coverage of src/main/php
