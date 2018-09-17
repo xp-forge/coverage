@@ -11,6 +11,7 @@
     "phpunit/php-code-coverage": "^6.0 | ^5.3",
     "php": ">=7.0.0"
   },
+  "bin": ["bin/xp.xp-forge.coverage"],
   "autoload" : {
     "files" : ["src/main/php/autoload.php"]
   }
