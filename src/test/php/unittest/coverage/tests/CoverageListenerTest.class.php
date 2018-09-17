@@ -11,11 +11,14 @@ class CoverageListenerTest extends TestCase {
   }
 
   #[@test]
-  public function run() {
+  public function run_creates_metrics() {
     $suite= new TestSuite();
+    $result= new TestResult();
 
     $l= new CoverageListener();
     $l->testRunStarted($suite);
-    $l->testRunFinished($suite, new TestResult());
+    $l->testRunFinished($suite, $result);
+
+    $this->assertTrue(array_key_exists('Coverage', $result->metrics()));
   }
 }

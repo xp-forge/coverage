@@ -146,5 +146,7 @@ class CoverageListener implements TestListener {
     }
 
     (new Facade())->process($this->coverage, $this->htmlReportDirectory);
+
+    $result->metric('Coverage', new CoveredLines($this->coverage));
   }
 }
