@@ -14,19 +14,19 @@ use unittest\{TestResult, TestWarning, TestFailure, TestError, TestSkipped, Test
  * @test  xp://unittest.coverage.tests.CoverageListenerTest
  */
 class CoverageListener implements TestListener {
-  private $paths= [];
+  private $coverage, $covering;
+
   private $cloverFile= null;
   private $htmlReportDirectory= './code-coverage-report';
-  private $coverage= null;
 
   /**
-   * register a path to include in coverage report
+   * Register a path to include in coverage report
    *
    * @param string
    */
   #[@arg]
   public function setRegisterPath($path) {
-    $this->paths[]= $path;
+    $this->coverage->filter()->addDirectoryToWhitelist($path);
   }
 
   /** Set directory to write html report to. */
@@ -60,7 +60,9 @@ class CoverageListener implements TestListener {
    * @param   unittest.TestCase failure
    */
   public function testStarted(TestCase $case) {
-    // Empty
+    $this->covering && $this->coverage->stop();
+    $this->coverage->start($case->getName(true));
+    $this->covering= true;
   }
 
   /**
@@ -125,11 +127,7 @@ class CoverageListener implements TestListener {
    * @param   unittest.TestSuite suite
    */
   public function testRunStarted(TestSuite $suite) {
-    foreach ($this->paths as $path) {
-      $this->coverage->filter()->addDirectoryToWhitelist($path);
-    }
-
-    $this->coverage->start('test');
+    $this->covering= false;
   }
 
   /**
@@ -139,7 +137,7 @@ class CoverageListener implements TestListener {
    * @param   unittest.TestResult result
    */
   public function testRunFinished(TestSuite $suite, TestResult $result) {
-    $this->coverage->stop();
+    $this->covering && $this->coverage->stop();
 
     if (null !== $this->cloverFile) {
       (new Clover())->process($this->coverage, $this->cloverFile);
