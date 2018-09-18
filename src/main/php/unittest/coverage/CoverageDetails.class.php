@@ -29,27 +29,6 @@ class CoverageDetails extends Metric {
     $this->classes= $report->getClasses();
   }
 
-  /**
-   * Creates a class name with a maximum length, shortening namespaces
-   * from the beginning
-   *
-   * @param  string[] $segments
-   * @param  int $length
-   * @return string
-   */
-  private function name($segments, $length) {
-    $name= array_pop($segments);
-    while ($segments && strlen($name) < $length) {
-      $name= array_pop($segments).'.'.$name;
-    }
-
-    if (strlen($name) > $length) {
-      return '…'.substr($name, -$length + 1);
-    } else {
-      return $name;
-    }
-  }
-
   /** @return string */
   protected function format() {
 
@@ -75,7 +54,7 @@ class CoverageDetails extends Metric {
 
       $s.= sprintf(
         "│ %-52s │ %s%6.2f%%\033[0m │ %4s │\n",
-        $this->name(explode('\\', $name), 52),
+        (new ClassName($name))->shortenedTo(52),
         $color,
         $percent,
         $uncovered ?: ''
