@@ -52,6 +52,12 @@ class CoverageListener implements TestListener {
     $this->coverage= new CodeCoverage();
   }
 
+  /** @return SebastianBergmann.CodeCoverage.CodeCoverage */
+  public function coverage() { return $this->coverage; }
+
+  /** @return [:var] */
+  public function reports() { return $this->reports; }
+
   /**
    * Called when a test case starts.
    *
@@ -59,7 +65,7 @@ class CoverageListener implements TestListener {
    */
   public function testStarted(TestCase $case) {
     $this->covering && $this->coverage->stop();
-    $this->coverage->start($case->getName(true));
+    $this->coverage->start($case->getName(true));  // @codeCoverageIgnore
     $this->covering= true;
   }
 
