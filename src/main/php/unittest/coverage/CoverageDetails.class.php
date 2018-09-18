@@ -5,14 +5,20 @@ use unittest\metrics\Metric;
 /**
  * Covered lines metric
  *
- * @test  xp://unittest.coverage.tests.CoveredLinesTest
+ * @test  xp://unittest.coverage.tests.CoverageDetailsTest
  */
 class CoverageDetails extends Metric {
-  private $coverage, $executed, $executable, $classes;
+  private $coverage, $reports, $executed, $executable, $classes;
 
-  /** @param SebastianBergmann.CodeCoverage.CodeCoverage $coverage */
-  public function __construct($coverage) {
+  /**
+   * Creates a new detailled coverage instance
+   *
+   * @param  SebastianBergmann.CodeCoverage.CodeCoverage $coverage
+   * @param  string[] $reports
+   */
+  public function __construct($coverage, $reports) {
     $this->coverage= $coverage;
+    $this->reports= $reports;
   }
 
   /** @return void */
@@ -50,11 +56,12 @@ class CoverageDetails extends Metric {
     // Summary
     $percent= $this->executed / $this->executable * 100;
     $s= sprintf(
-      "%s%.2f%%\033[0m lines covered (%d/%d)\n\n",
+      "%s%.2f%%\033[0m lines covered (%d/%d)%s\n\n",
       $percent < 50.0 ? "\033[31;1m" : ($percent < 90.0 ? "\033[33;1m" : "\033[32;1m"),
       $percent,
       $this->executed,
-      $this->executable
+      $this->executable,
+      $this->reports ? " > \033[36;4m".implode(' & ', $this->reports)."\033[0m" : ''
     );
 
     // Details by class

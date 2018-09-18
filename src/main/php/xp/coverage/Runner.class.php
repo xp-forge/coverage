@@ -20,6 +20,8 @@ use util\cmd\Console;
  *   ```sh
  *   $ xp coverage -p src/main/php -r ./coverage-report src/test/php
  *   ```
+ *
+ * The `-r` and `-c` options can be combined, of course.
  */
 class Runner {
 

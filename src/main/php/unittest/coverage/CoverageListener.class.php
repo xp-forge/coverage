@@ -15,9 +15,7 @@ use unittest\{TestResult, TestWarning, TestFailure, TestError, TestSkipped, Test
  */
 class CoverageListener implements TestListener {
   private $coverage, $covering;
-
-  private $cloverFile= null;
-  private $htmlReportDirectory= null;
+  private $reports= [];
 
   /** Register a path to include in coverage report */
   #[@arg]
@@ -28,13 +26,17 @@ class CoverageListener implements TestListener {
   /** Set directory to write html report to. */
   #[@arg]
   public function setHtmlReportDirectory(string $htmlReportDirectory) {
-    $this->htmlReportDirectory= $htmlReportDirectory;
+    $this->reports[$htmlReportDirectory.'/index.html']= function($coverage) use($htmlReportDirectory) {
+      (new Facade())->process($coverage, $htmlReportDirectory);
+    };
   }
 
   /** Write clover report to specified file. */
   #[@arg]
   public function setCloverFile(string $cloverFile) {
-    $this->cloverFile= $cloverFile;
+    $this->reports[$cloverFile]= function($coverage) use($cloverFile) {
+      (new Clover())->process($coverage, $cloverFile);
+    };
   }
 
   /**
@@ -135,14 +137,10 @@ class CoverageListener implements TestListener {
   public function testRunFinished(TestSuite $suite, TestResult $result) {
     $this->covering && $this->coverage->stop();
 
-    if (null !== $this->cloverFile) {
-      (new Clover())->process($this->coverage, $this->cloverFile);
+    foreach ($this->reports as $report) {
+      $report($this->coverage);
     }
 
-    if (null !== $this->htmlReportDirectory) {
-      (new Facade())->process($this->coverage, $this->htmlReportDirectory);
-    }
-
-    $result->metric('Coverage', new CoverageDetails($this->coverage));
+    $result->metric('Coverage', new CoverageDetails($this->coverage, array_keys($this->reports)));
   }
 }
