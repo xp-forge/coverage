@@ -17,15 +17,11 @@ class CoverageListener implements TestListener {
   private $coverage, $covering;
 
   private $cloverFile= null;
-  private $htmlReportDirectory= './code-coverage-report';
+  private $htmlReportDirectory= null;
 
-  /**
-   * Register a path to include in coverage report
-   *
-   * @param string
-   */
+  /** Register a path to include in coverage report */
   #[@arg]
-  public function setRegisterPath($path) {
+  public function setRegisterPath(string $path) {
     $this->coverage->filter()->addDirectoryToWhitelist($path);
   }
 
@@ -143,8 +139,10 @@ class CoverageListener implements TestListener {
       (new Clover())->process($this->coverage, $this->cloverFile);
     }
 
-    (new Facade())->process($this->coverage, $this->htmlReportDirectory);
+    if (null !== $this->htmlReportDirectory) {
+      (new Facade())->process($this->coverage, $this->htmlReportDirectory);
+    }
 
-    $result->metric('Coverage', new CoveredLines($this->coverage));
+    $result->metric('Coverage', new CoverageDetails($this->coverage));
   }
 }
