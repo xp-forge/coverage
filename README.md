@@ -14,18 +14,18 @@ Usage
 
 ```bash
 $ xp coverage -p src/main/php/unittest/ src/test/php
-[...........]
+[.................]
 
-♥: 11/11 run (0 skipped), 11 succeeded, 0 failed
-Memory used: 3984.77 kB (4204.02 kB peak)
-Time taken: 0.450 seconds
-Coverage: 37.97% lines covered (30/79)
+♥: 13/13 run (0 skipped), 13 succeeded, 0 failed
+Memory used: 5026.80 kB (5307.88 kB peak)
+Time taken: 0.423 seconds
+Coverage: 79.01% lines covered (64/81)
 
 ┌──────────────────────────────────────────────────────┬─────────┬──────┐
 │ Class                                                │ % Lines │  Not │
 ╞══════════════════════════════════════════════════════╪═════════╪══════╡
-│ unittest.coverage.CoverageDetails                    │   5.56% │   34 │
-│ unittest.coverage.CoverageListener                   │  48.28% │   15 │
+│ unittest.coverage.CoverageDetails                    │  97.37% │    1 │
+│ unittest.coverage.CoverageListener                   │  44.83% │   16 │
 │ unittest.coverage.CoveredLines                       │ 100.00% │      │
 └──────────────────────────────────────────────────────┴─────────┴──────┘
 ```
