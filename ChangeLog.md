@@ -3,6 +3,10 @@ Coverage change log
 
 ## ?.?.? / ????-??-??
 
+## 0.3.0 / 2018-09-21
+
+* Merged PR #4: Coverage details
+
 ## 0.2.0 / 2018-09-17
 
 * Merged PR #3: Fix test display - @OlafSeng
