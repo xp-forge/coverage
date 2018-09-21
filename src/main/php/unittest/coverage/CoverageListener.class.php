@@ -15,30 +15,28 @@ use unittest\{TestResult, TestWarning, TestFailure, TestError, TestSkipped, Test
  */
 class CoverageListener implements TestListener {
   private $coverage, $covering;
+  private $reports= [];
 
-  private $cloverFile= null;
-  private $htmlReportDirectory= './code-coverage-report';
-
-  /**
-   * Register a path to include in coverage report
-   *
-   * @param string
-   */
+  /** Register a path to include in coverage report */
   #[@arg]
-  public function setRegisterPath($path) {
+  public function setRegisterPath(string $path) {
     $this->coverage->filter()->addDirectoryToWhitelist($path);
   }
 
   /** Set directory to write html report to. */
   #[@arg]
   public function setHtmlReportDirectory(string $htmlReportDirectory) {
-    $this->htmlReportDirectory= $htmlReportDirectory;
+    $this->reports[$htmlReportDirectory.'/index.html']= function($coverage) use($htmlReportDirectory) {
+      (new Facade())->process($coverage, $htmlReportDirectory);
+    };
   }
 
   /** Write clover report to specified file. */
   #[@arg]
   public function setCloverFile(string $cloverFile) {
-    $this->cloverFile= $cloverFile;
+    $this->reports[$cloverFile]= function($coverage) use($cloverFile) {
+      (new Clover())->process($coverage, $cloverFile);
+    };
   }
 
   /**
@@ -54,6 +52,12 @@ class CoverageListener implements TestListener {
     $this->coverage= new CodeCoverage();
   }
 
+  /** @return SebastianBergmann.CodeCoverage.CodeCoverage */
+  public function coverage() { return $this->coverage; }
+
+  /** @return [:var] */
+  public function reports() { return $this->reports; }
+
   /**
    * Called when a test case starts.
    *
@@ -61,7 +65,7 @@ class CoverageListener implements TestListener {
    */
   public function testStarted(TestCase $case) {
     $this->covering && $this->coverage->stop();
-    $this->coverage->start($case->getName(true));
+    $this->coverage->start($case->getName(true));  // @codeCoverageIgnore
     $this->covering= true;
   }
 
@@ -139,12 +143,10 @@ class CoverageListener implements TestListener {
   public function testRunFinished(TestSuite $suite, TestResult $result) {
     $this->covering && $this->coverage->stop();
 
-    if (null !== $this->cloverFile) {
-      (new Clover())->process($this->coverage, $this->cloverFile);
+    foreach ($this->reports as $report) {
+      $report($this->coverage);
     }
 
-    (new Facade())->process($this->coverage, $this->htmlReportDirectory);
-
-    $result->metric('Coverage', new CoveredLines($this->coverage));
+    $result->metric('Coverage', new CoverageDetails($this->coverage, array_keys($this->reports)));
   }
 }

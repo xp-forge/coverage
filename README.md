@@ -13,13 +13,20 @@ Usage
 -----
 
 ```bash
-$ xp coverage -p src/main/php src/test/php
-[...........]
+$ xp coverage -p src/main/php/unittest/ src/test/php
+[.....................]
 
-♥: 11/11 run (0 skipped), 11 succeeded, 0 failed
-Memory used: 4347.41 kB (4622.48 kB peak)
-Time taken: 0.434 seconds
-Coverage: 66.67% lines covered (28/42)
+♥: 21/21 run (0 skipped), 21 succeeded, 0 failed
+Memory used: 3839.68 kB (4050.93 kB peak)
+Time taken: 0.246 seconds
+Coverage: 84.72% lines covered (61/72)
+
+┌──────────────────────────────────────────────────────┬─────────┬──────┐
+│ Class                                                │ % Lines │  Not │
+╞══════════════════════════════════════════════════════╪═════════╪══════╡
+│ unittest.coverage.ClassName                          │ 100.00% │      │
+│ unittest.coverage.CoverageDetails                    │ 100.00% │      │
+│ unittest.coverage.CoverageListener                   │  60.71% │   11 │
+└──────────────────────────────────────────────────────┴─────────┴──────┘
 ```
 
-Now open *./code-coverage-report/index.html* in your browser

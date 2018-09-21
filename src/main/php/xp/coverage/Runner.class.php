@@ -16,9 +16,12 @@ use util\cmd\Console;
  *   ```sh
  *   $ xp coverage -p src/main/php -c clover.xml src/test/php
  *   ```
+ * - Same as above, additionally generate a HTML report
+ *   ```sh
+ *   $ xp coverage -p src/main/php -r ./coverage-report src/test/php
+ *   ```
  *
- * The HTML report is generated to *./code-coverage-report/index.html* by
- * default. The directory name can be changed by using the `-r` option.
+ * The `-r` and `-c` options can be combined, of course.
  */
 class Runner {
 
