@@ -3,6 +3,10 @@ Coverage change log
 
 ## ?.?.? / ????-??-??
 
+## 0.3.1 / 2018-09-23
+
+* Fixed class loading errors in global installation - @thekid
+
 ## 0.3.0 / 2018-09-21
 
 * Merged PR #4: Coverage details
