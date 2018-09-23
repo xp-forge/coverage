@@ -7,7 +7,16 @@ Code coverage for XP Framework unittests
 [![Supports PHP 7.0+](https://raw.githubusercontent.com/xp-framework/web/master/static/php-7_0plus.png)](http://php.net/)
 [![Latest Stable Version](https://poser.pugx.org/xp-forge/coverage/version.png)](https://packagist.org/packages/xp-forge/coverage)
 
-Code coverage for XP using the [XDebug Zend extension](https://xdebug.org/download.php). Based on Sebastian Bergmann's [Code coverage](https://github.com/sebastianbergmann/php-code-coverage) library.
+Code coverage for XP using XDebug. Based on Sebastian Bergmann's [Code coverage](https://github.com/sebastianbergmann/php-code-coverage) library.
+
+Installation
+------------
+
+```bash
+$ composer global require xp-forge/coverage
+```
+
+Next, make sure you have the [XDebug Zend extension](https://xdebug.org/download.php) loaded via `zend_extension`.
 
 Usage
 -----
