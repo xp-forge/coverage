@@ -34,7 +34,9 @@ Coverage: 84.72% lines covered (61/72)
 
 An optional HTML report can be generated like this. 
 
-`xp coverage -p src/main/php src/test/php/ -o htmlreportdirectory report`
+```bash
+$ xp coverage -p src/main/php -r ./coverage-report src/test/php/
+```
 
 Use it in order to find out how to improve your coverage.
 
@@ -42,4 +44,6 @@ Use it in order to find out how to improve your coverage.
 
 A [clover](https://www.atlassian.com/software/clover) report can be generated as well.
 
-`xp coverage -p src/main/php src/test/php/ -o cloverfile clo.xml`
+```bash
+$ xp coverage -p src/main/php -c clover.xml src/test/php/
+```
