@@ -3,6 +3,11 @@ Coverage change log
 
 ## ?.?.? / ????-??-??
 
+## 0.4.0 / 2019-09-16
+
+* Added compatibility with PHP 7.3 and PHP 7.4 - @thekid
+* Made compatible with `phpunit/php-code-coverage` version 7.0 - @thekid
+
 ## 0.3.1 / 2018-09-23
 
 * Fixed class loading errors in global installation - @thekid
