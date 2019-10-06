@@ -2,6 +2,7 @@
 
 use lang\reflect\TargetInvocationException;
 use lang\{XPClass, Throwable};
+use unittest\Listener;
 use util\cmd\Console;
 
 /**
@@ -28,8 +29,14 @@ class Runner {
   /** @return int */
   public static function main(array $args) {
 
+    // Select correct listener based
+    if (interface_exists(Listener::class)) {
+      $pass= ['-l', 'unittest.coverage.RecordCoverage', '-'];
+    } else {
+      $pass= ['-l', 'unittest.coverage.CoverageListener', '-'];
+    }
+
     // Generate arguments to `xp test`
-    $pass= ['-l', 'unittest.coverage.CoverageListener', '-'];
     for ($i= 0, $s= sizeof($args); $i < $s; $i++) {
       if ('-p' === $args[$i]) {
         $pass[]= '-o';
