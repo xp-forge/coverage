@@ -3,6 +3,10 @@ Coverage change log
 
 ## ?.?.? / ????-??-??
 
+## 1.0.0 / 2019-10-06
+
+* Merged PR #8: Adapt to new unittest listener API - @thekid
+
 ## 0.4.0 / 2019-09-16
 
 * Added compatibility with PHP 7.3 and PHP 7.4 - @thekid
