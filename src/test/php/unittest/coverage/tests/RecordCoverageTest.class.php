@@ -1,8 +1,10 @@
 <?php namespace unittest\coverage\tests;
 
+use unittest\actions\VerifyThat;
 use unittest\coverage\RecordCoverage;
-use unittest\{TestCase, TestSuite, TestResult};
+use unittest\{TestCase, TestSuite, TestResult, Listener};
 
+#[@action(new VerifyThat(function() { return interface_exists(Listener::class); }))]
 class RecordCoverageTest extends TestCase {
 
   #[@test]
