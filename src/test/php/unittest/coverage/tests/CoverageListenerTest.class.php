@@ -3,6 +3,7 @@
 use unittest\coverage\CoverageListener;
 use unittest\{TestCase, TestSuite, TestResult};
 
+/** @deprecated */
 class CoverageListenerTest extends TestCase {
 
   #[@test]

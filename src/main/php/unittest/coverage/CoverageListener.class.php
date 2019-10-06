@@ -10,6 +10,7 @@ use unittest\{TestResult, TestWarning, TestFailure, TestError, TestSkipped, Test
 /**
  * Coverage listener
  *
+ * @deprecated Used for xp-framework/unittest < 10.0.0
  * @ext   xdebug
  * @test  xp://unittest.coverage.tests.CoverageListenerTest
  */
