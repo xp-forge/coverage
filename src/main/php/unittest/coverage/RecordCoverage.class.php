@@ -131,10 +131,6 @@ class RecordCoverage implements Listener {
    * @param  unittest.TestSuite $suite
    */
   public function testRunStarted(TestSuite $suite) {
-    if (!$this->coverage->filter()->hasWhitelist()) {
-      throw new PrerequisitesNotMetError('Please supply a directory to be measured via -p');
-    }
-
     $this->covering= false;
   }
 

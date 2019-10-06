@@ -37,11 +37,13 @@ class Runner {
     }
 
     // Generate arguments to `xp test`
+    $path= false;
     for ($i= 0, $s= sizeof($args); $i < $s; $i++) {
       if ('-p' === $args[$i]) {
         $pass[]= '-o';
         $pass[]= 'registerpath';
         $pass[]= $args[++$i];
+        $path= true;
       } else if ('-r' === $args[$i]) {
         $pass[]= '-o';
         $pass[]= 'htmlreportdirectory';
@@ -53,6 +55,11 @@ class Runner {
       } else {
         $pass[]= $args[$i];
       }
+    }
+
+    if (!$path) {
+      Console::$err->writeLine('Need at least one path passed via -p to compute coverage!');
+      return 1;
     }
 
     try {
