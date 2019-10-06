@@ -2,9 +2,11 @@
 
 use unittest\actions\VerifyThat;
 use unittest\coverage\RecordCoverage;
-use unittest\{TestCase, TestSuite, TestResult, Listener};
+use unittest\{TestCase, TestSuite, TestResult};
 
-#[@action(new VerifyThat(function() { return interface_exists(Listener::class); }))]
+#[@action(new VerifyThat(function() {
+#  return interface_exists(\unittest\Listener::class);
+#}))]
 class RecordCoverageTest extends TestCase {
 
   #[@test]
