@@ -4,17 +4,16 @@ use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Report\Clover;
 use SebastianBergmann\CodeCoverage\Report\Html\Facade;
 use lang\Runtime;
-use unittest\{PrerequisitesNotMetError, TestSuite, TestCase, TestListener};
-use unittest\{TestResult, TestWarning, TestFailure, TestError, TestSkipped, TestSuccess};
+use unittest\{PrerequisitesNotMetError, TestSuite, Listener};
+use unittest\{TestStart, TestResult, TestWarning, TestFailure, TestError, TestSkipped, TestSuccess};
 
 /**
  * Coverage listener
  *
- * @deprecated Used for xp-framework/unittest < 10.0.0
  * @ext   xdebug
  * @test  xp://unittest.coverage.tests.CoverageListenerTest
  */
-class CoverageListener implements TestListener {
+class RecordCoverage implements Listener {
   private $coverage, $covering;
   private $reports= [];
 
@@ -62,18 +61,18 @@ class CoverageListener implements TestListener {
   /**
    * Called when a test case starts.
    *
-   * @param   unittest.TestCase failure
+   * @param  unittest.TestStart $start
    */
-  public function testStarted(TestCase $case) {
+  public function testStarted(TestStart $start) {
     $this->covering && $this->coverage->stop();
-    $this->coverage->start($case->getName(true));  // @codeCoverageIgnore
+    $this->coverage->start($start->test()->getName(true));  // @codeCoverageIgnore
     $this->covering= true;
   }
 
   /**
    * Called when a test fails.
    *
-   * @param   unittest.TestFailure failure
+   * @param  unittest.TestFailure $failure
    */
   public function testFailed(TestFailure $failure) {
     // Empty
@@ -82,7 +81,7 @@ class CoverageListener implements TestListener {
   /**
    * Called when a test errors.
    *
-   * @param   unittest.TestFailure error
+   * @param  unittest.TestFailure $error
    */
   public function testError(TestError $error) {
     // Empty
@@ -91,7 +90,7 @@ class CoverageListener implements TestListener {
   /**
    * Called when a test raises warnings.
    *
-   * @param   unittest.TestWarning warning
+   * @param  unittest.TestWarning $warning
    */
   public function testWarning(TestWarning $warning) {
     // Empty
@@ -100,7 +99,7 @@ class CoverageListener implements TestListener {
   /**
    * Called when a test finished successfully.
    *
-   * @param   unittest.TestSuccess success
+   * @param  unittest.TestSuccess $success
    */
   public function testSucceeded(TestSuccess $success) {
     // Empty
@@ -110,7 +109,7 @@ class CoverageListener implements TestListener {
    * Called when a test is not run because it is skipped due to a
    * failed prerequisite.
    *
-   * @param   unittest.TestSkipped skipped
+   * @param  unittest.TestSkipped $skipped
    */
   public function testSkipped(TestSkipped $skipped) {
     // Empty
@@ -120,7 +119,7 @@ class CoverageListener implements TestListener {
    * Called when a test is not run because it has been ignored by using
    * the @ignore annotation.
    *
-   * @param   unittest.TestSkipped ignore
+   * @param  unittest.TestSkipped $ignore
    */
   public function testNotRun(TestSkipped $ignore) {
     // Empty
@@ -129,7 +128,7 @@ class CoverageListener implements TestListener {
   /**
    * Called when a test run starts.
    *
-   * @param   unittest.TestSuite suite
+   * @param  unittest.TestSuite $suite
    */
   public function testRunStarted(TestSuite $suite) {
     $this->covering= false;
@@ -138,8 +137,8 @@ class CoverageListener implements TestListener {
   /**
    * Called when a test run finishes.
    *
-   * @param   unittest.TestSuite suite
-   * @param   unittest.TestResult result
+   * @param  unittest.TestSuite $suite
+   * @param  unittest.TestResult $result
    */
   public function testRunFinished(TestSuite $suite, TestResult $result) {
     $this->covering && $this->coverage->stop();

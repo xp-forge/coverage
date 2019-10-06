@@ -2,6 +2,7 @@
 
 use lang\reflect\TargetInvocationException;
 use lang\{XPClass, Throwable};
+use unittest\Listener;
 use util\cmd\Console;
 
 /**
@@ -28,13 +29,21 @@ class Runner {
   /** @return int */
   public static function main(array $args) {
 
+    // Select correct listener based
+    if (interface_exists(Listener::class)) {
+      $pass= ['-l', 'unittest.coverage.RecordCoverage', '-'];
+    } else {
+      $pass= ['-l', 'unittest.coverage.CoverageListener', '-'];
+    }
+
     // Generate arguments to `xp test`
-    $pass= ['-l', 'unittest.coverage.CoverageListener', '-'];
+    $path= false;
     for ($i= 0, $s= sizeof($args); $i < $s; $i++) {
       if ('-p' === $args[$i]) {
         $pass[]= '-o';
         $pass[]= 'registerpath';
         $pass[]= $args[++$i];
+        $path= true;
       } else if ('-r' === $args[$i]) {
         $pass[]= '-o';
         $pass[]= 'htmlreportdirectory';
@@ -46,6 +55,11 @@ class Runner {
       } else {
         $pass[]= $args[$i];
       }
+    }
+
+    if (!$path) {
+      Console::$err->writeLine('Need at least one path passed via -p to compute coverage!');
+      return 1;
     }
 
     try {
