@@ -3,6 +3,10 @@ Coverage change log
 
 ## ?.?.? / ????-??-??
 
+## 9.0.1 / 2020-04-05
+
+* Made compatible with XP 10 - @thekid
+
 ## 1.0.0 / 2019-10-06
 
 * Merged PR #8: Adapt to new unittest listener API - @thekid
