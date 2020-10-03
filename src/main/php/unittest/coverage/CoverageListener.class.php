@@ -1,9 +1,7 @@
 <?php namespace unittest\coverage;
 
-use SebastianBergmann\CodeCoverage\Driver\Selector;
 use SebastianBergmann\CodeCoverage\Report\Clover;
 use SebastianBergmann\CodeCoverage\Report\Html\Facade;
-use SebastianBergmann\CodeCoverage\{CodeCoverage, Filter};
 use lang\Runtime;
 use unittest\{
   Arg,
