@@ -34,7 +34,11 @@ class CoverageListener implements TestListener {
   /** Register a path to include in coverage report */
   #[Arg]
   public function setRegisterPath(string $path) {
-    $this->filter->includeDirectory($path);
+    if (method_exist($this->filter, 'includeDirectory')) {
+      $this->filter->includeDirectory($path);
+    } else {
+      $this->filter->addDirectoryToWhitelist($path);
+    }
   }
 
   /** Set directory to write html report to. */
@@ -64,7 +68,8 @@ class CoverageListener implements TestListener {
     }
 
     $this->filter= new Filter();
-    $this->coverage= new CodeCoverage((new Selector())->forLineCoverage($this->filter), $this->filter);
+    $driver= class_exists(Selector::class, false) ? (new Selector())->forLineCoverage($this->filter) : null;
+    $this->coverage= new CodeCoverage($driver, $this->filter);
   }
 
   /** @return SebastianBergmann.CodeCoverage.CodeCoverage */
