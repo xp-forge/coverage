@@ -26,7 +26,7 @@ use unittest\{
  * @test  xp://unittest.coverage.tests.CoverageListenerTest
  */
 class CoverageListener implements TestListener {
-  private $coverage, $covering, $filter;
+  private $coverage, $covering;
   private $reports= [];
 
   /** Register a path to include in coverage report */
