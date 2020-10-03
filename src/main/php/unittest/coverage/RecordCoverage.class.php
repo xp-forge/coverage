@@ -4,8 +4,19 @@ use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Report\Clover;
 use SebastianBergmann\CodeCoverage\Report\Html\Facade;
 use lang\Runtime;
-use unittest\{PrerequisitesNotMetError, TestSuite, Listener};
-use unittest\{TestStart, TestResult, TestWarning, TestFailure, TestError, TestSkipped, TestSuccess};
+use unittest\{
+  Arg,
+  PrerequisitesNotMetError,
+  TestSuite,
+  Listener,
+  TestStart,
+  TestResult,
+  TestWarning,
+  TestFailure,
+  TestError,
+  TestSkipped,
+  TestSuccess
+};
 
 /**
  * Coverage listener
@@ -18,13 +29,13 @@ class RecordCoverage implements Listener {
   private $reports= [];
 
   /** Register a path to include in coverage report */
-  #[@arg]
+  #[Arg]
   public function setRegisterPath(string $path) {
     $this->coverage->filter()->addDirectoryToWhitelist($path);
   }
 
   /** Set directory to write html report to. */
-  #[@arg]
+  #[Arg]
   public function setHtmlReportDirectory(string $htmlReportDirectory) {
     $this->reports[$htmlReportDirectory.'/index.html']= function($coverage) use($htmlReportDirectory) {
       (new Facade())->process($coverage, $htmlReportDirectory);
@@ -32,7 +43,7 @@ class RecordCoverage implements Listener {
   }
 
   /** Write clover report to specified file. */
-  #[@arg]
+  #[Arg]
   public function setCloverFile(string $cloverFile) {
     $this->reports[$cloverFile]= function($coverage) use($cloverFile) {
       (new Clover())->process($coverage, $cloverFile);
