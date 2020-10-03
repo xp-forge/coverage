@@ -34,7 +34,7 @@ class CoverageListener implements TestListener {
   /** Register a path to include in coverage report */
   #[Arg]
   public function setRegisterPath(string $path) {
-    if (method_exist($this->filter, 'includeDirectory')) {
+    if (method_exists($this->filter, 'includeDirectory')) {
       $this->filter->includeDirectory($path);
     } else {
       $this->filter->addDirectoryToWhitelist($path);
@@ -68,7 +68,7 @@ class CoverageListener implements TestListener {
     }
 
     $this->filter= new Filter();
-    $driver= class_exists(Selector::class, false) ? (new Selector())->forLineCoverage($this->filter) : null;
+    $driver= class_exists(Selector::class) ? (new Selector())->forLineCoverage($this->filter) : null;
     $this->coverage= new CodeCoverage($driver, $this->filter);
   }
 
