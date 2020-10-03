@@ -1,17 +1,17 @@
 <?php namespace unittest\coverage\tests;
 
 use unittest\coverage\CoverageListener;
-use unittest\{TestCase, TestSuite, TestResult};
+use unittest\{Test, TestCase, TestResult, TestSuite};
 
 /** @deprecated */
 class CoverageListenerTest extends TestCase {
 
-  #[@test]
+  #[Test]
   public function can_create() {
     new CoverageListener();
   }
 
-  #[@test]
+  #[Test]
   public function run_creates_metrics() {
     $suite= new TestSuite();
     $result= new TestResult();
@@ -23,7 +23,7 @@ class CoverageListenerTest extends TestCase {
     $this->assertTrue(array_key_exists('Coverage', $result->metrics()));
   }
 
-  #[@test]
+  #[Test]
   public function registering_path_fills_whitelist() {
     $c= new CoverageListener();
     $c->setRegisterPath('src/main/php');
@@ -31,7 +31,7 @@ class CoverageListenerTest extends TestCase {
     $this->assertTrue($c->coverage()->filter()->hasWhitelist());
   }
 
-  #[@test]
+  #[Test]
   public function html_report() {
     $c= new CoverageListener();
     $c->setHtmlReportDirectory('coverage-report');
@@ -39,7 +39,7 @@ class CoverageListenerTest extends TestCase {
     $this->assertTrue(array_key_exists('coverage-report/index.html',$c->reports()));
   }
 
-  #[@test]
+  #[Test]
   public function clover_report() {
     $c= new CoverageListener();
     $c->setCloverFile('clover.xml');
