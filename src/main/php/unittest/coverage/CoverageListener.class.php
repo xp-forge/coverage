@@ -1,14 +1,16 @@
 <?php namespace unittest\coverage;
 
-use SebastianBergmann\CodeCoverage\CodeCoverage;
+use SebastianBergmann\CodeCoverage\Driver\Selector;
 use SebastianBergmann\CodeCoverage\Report\Clover;
 use SebastianBergmann\CodeCoverage\Report\Html\Facade;
+use SebastianBergmann\CodeCoverage\{CodeCoverage, Filter};
 use lang\Runtime;
 use unittest\{
   Arg,
   PrerequisitesNotMetError,
+  TestCase,
   TestSuite,
-  Listener,
+  TestListener,
   TestStart,
   TestResult,
   TestWarning,
@@ -26,13 +28,13 @@ use unittest\{
  * @test  xp://unittest.coverage.tests.CoverageListenerTest
  */
 class CoverageListener implements TestListener {
-  private $coverage, $covering;
+  private $coverage, $covering, $filter;
   private $reports= [];
 
   /** Register a path to include in coverage report */
   #[Arg]
   public function setRegisterPath(string $path) {
-    $this->coverage->filter()->addDirectoryToWhitelist($path);
+    $this->filter->includeDirectory($path);
   }
 
   /** Set directory to write html report to. */
@@ -61,7 +63,8 @@ class CoverageListener implements TestListener {
       throw new PrerequisitesNotMetError('code coverage not available. Please install the xdebug extension.');
     }
 
-    $this->coverage= new CodeCoverage();
+    $this->filter= new Filter();
+    $this->coverage= new CodeCoverage((new Selector())->forLineCoverage($this->filter), $this->filter);
   }
 
   /** @return SebastianBergmann.CodeCoverage.CodeCoverage */

@@ -28,7 +28,7 @@ class CoverageListenerTest extends TestCase {
     $c= new CoverageListener();
     $c->setRegisterPath('src/main/php');
 
-    $this->assertTrue($c->coverage()->filter()->hasWhitelist());
+    $this->assertFalse($c->coverage()->filter()->isEmpty());
   }
 
   #[Test]
@@ -36,7 +36,7 @@ class CoverageListenerTest extends TestCase {
     $c= new CoverageListener();
     $c->setHtmlReportDirectory('coverage-report');
 
-    $this->assertTrue(array_key_exists('coverage-report/index.html',$c->reports()));
+    $this->assertTrue(array_key_exists('coverage-report/index.html', $c->reports()));
   }
 
   #[Test]
