@@ -1,9 +1,7 @@
 <?php namespace unittest\coverage;
 
-use SebastianBergmann\CodeCoverage\Driver\Selector;
 use SebastianBergmann\CodeCoverage\Report\Clover;
 use SebastianBergmann\CodeCoverage\Report\Html\Facade;
-use SebastianBergmann\CodeCoverage\{CodeCoverage, Filter};
 use lang\Runtime;
 use unittest\{
   Arg,
@@ -26,17 +24,13 @@ use unittest\{
  * @test  xp://unittest.coverage.tests.CoverageListenerTest
  */
 class RecordCoverage implements Listener {
-  private $coverage, $covering, $filter;
+  private $coverage, $covering;
   private $reports= [];
 
   /** Register a path to include in coverage report */
   #[Arg]
   public function setRegisterPath(string $path) {
-    if (method_exists($this->filter, 'includeDirectory')) {
-      $this->filter->includeDirectory($path);
-    } else {
-      $this->filter->addDirectoryToWhitelist($path);
-    }
+    $this->coverage->target($path);
   }
 
   /** Set directory to write html report to. */
@@ -65,9 +59,7 @@ class RecordCoverage implements Listener {
       throw new PrerequisitesNotMetError('code coverage not available. Please install the xdebug extension.');
     }
 
-    $this->filter= new Filter();
-    $driver= class_exists(Selector::class) ? (new Selector())->forLineCoverage($this->filter) : null;
-    $this->coverage= new CodeCoverage($driver, $this->filter);
+    $this->coverage= Coverage::newInstance();
   }
 
   /** @return SebastianBergmann.CodeCoverage.CodeCoverage */
@@ -165,6 +157,6 @@ class RecordCoverage implements Listener {
       $report($this->coverage);
     }
 
-    $result->metric('Coverage', new CoverageDetails($this->coverage, array_keys($this->reports)));
+    $result->metric('Coverage', new CoverageDetails($this->coverage->report(), array_keys($this->reports)));
   }
 }

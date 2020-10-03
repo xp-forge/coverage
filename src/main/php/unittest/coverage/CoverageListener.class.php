@@ -34,11 +34,7 @@ class CoverageListener implements TestListener {
   /** Register a path to include in coverage report */
   #[Arg]
   public function setRegisterPath(string $path) {
-    if (method_exists($this->filter, 'includeDirectory')) {
-      $this->filter->includeDirectory($path);
-    } else {
-      $this->filter->addDirectoryToWhitelist($path);
-    }
+    $this->coverage->target($path);
   }
 
   /** Set directory to write html report to. */
@@ -67,9 +63,7 @@ class CoverageListener implements TestListener {
       throw new PrerequisitesNotMetError('code coverage not available. Please install the xdebug extension.');
     }
 
-    $this->filter= new Filter();
-    $driver= class_exists(Selector::class) ? (new Selector())->forLineCoverage($this->filter) : null;
-    $this->coverage= new CodeCoverage($driver, $this->filter);
+    $this->coverage= Coverage::newInstance();
   }
 
   /** @return SebastianBergmann.CodeCoverage.CodeCoverage */
@@ -167,6 +161,6 @@ class CoverageListener implements TestListener {
       $report($this->coverage);
     }
 
-    $result->metric('Coverage', new CoverageDetails($this->coverage, array_keys($this->reports)));
+    $result->metric('Coverage', new CoverageDetails($this->coverage->report(), array_keys($this->reports)));
   }
 }

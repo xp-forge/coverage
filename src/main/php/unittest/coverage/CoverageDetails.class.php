@@ -13,7 +13,7 @@ class CoverageDetails extends Metric {
   /**
    * Creates a new detailled coverage instance
    *
-   * @param  SebastianBergmann.CodeCoverage.CodeCoverage $coverage
+   * @param  SebastianBergmann.CodeCoverage.Node.Directory $coverage
    * @param  string[] $reports
    */
   public function __construct($coverage, $reports) {
@@ -23,10 +23,9 @@ class CoverageDetails extends Metric {
 
   /** @return void */
   protected function calculate() {
-    $report= $this->coverage->getReport();
-    $this->executed= $report->getNumExecutedLines();
-    $this->executable= $report->getNumExecutableLines();
-    $this->classes= $report->getClasses();
+    $this->executed= $this->coverage->getNumExecutedLines();
+    $this->executable= $this->coverage->getNumExecutableLines();
+    $this->classes= $this->coverage->getClasses();
   }
 
   /** @return string */

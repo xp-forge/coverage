@@ -16,7 +16,7 @@ class CoverageDetailsTest extends TestCase {
     $coverage= new CodeCoverage();
     $coverage->setData([__FILE__ => $lines]);
 
-    $this->assertEquals($expected, (float)(new CoverageDetails($coverage, []))->calculated());
+    $this->assertEquals($expected, (float)(new CoverageDetails($coverage->getReport(), []))->calculated());
   }
 
   #[Test, Ignore('Need to figure out how to create CodeCoverage with coverage data programmatically')]
@@ -24,6 +24,6 @@ class CoverageDetailsTest extends TestCase {
     $coverage= new CodeCoverage();
     $coverage->setData([__FILE__ => [1 => ['test']]]);
 
-    $this->assertNotEquals('', (new CoverageDetails($coverage, []))->formatted());
+    $this->assertNotEquals('', (new CoverageDetails($coverage->getReport(), []))->formatted());
   }
 }

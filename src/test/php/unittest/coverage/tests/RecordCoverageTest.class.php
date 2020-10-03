@@ -29,12 +29,7 @@ class RecordCoverageTest extends TestCase {
     $c= new RecordCoverage();
     $c->setRegisterPath('src/main/php');
 
-    $filter= $c->coverage()->filter();
-    if (method_exists($filter, 'isEmpty')) {
-      $this->assertFalse($filter->isEmpty());
-    } else {
-      $this->assertTrue($filter->hasWhitelist());
-    }
+    $this->assertTrue($c->coverage()->targetsPresent());
   }
 
   #[Test]
