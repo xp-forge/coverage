@@ -28,7 +28,12 @@ class CoverageListenerTest extends TestCase {
     $c= new CoverageListener();
     $c->setRegisterPath('src/main/php');
 
-    $this->assertFalse($c->coverage()->filter()->isEmpty());
+    $filter= $c->coverage()->filter();
+    if (method_exists($filter, 'isEmpty')) {
+      $this->assertFalse($filter->isEmpty());
+    } else {
+      $this->assertTrue($filter->hasWhitelist());
+    }
   }
 
   #[Test]
