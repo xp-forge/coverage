@@ -1,13 +1,11 @@
 <?php namespace unittest\coverage\impl;
 
 use PHPUnit\Runner\BaseTestRunner;
+use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Driver\Selector;
-use SebastianBergmann\CodeCoverage\Report\Clover;
-use SebastianBergmann\CodeCoverage\Report\Html\Facade;
-use SebastianBergmann\CodeCoverage\{CodeCoverage, Filter};
 
-class Coverage9 implements Implementation {
-  private $filter, $backing;
+/** Coverage implementation for php-code-coverage >= 9.0 */
+class Coverage9 extends Implementation {
 
   static function __static() {
 
@@ -27,10 +25,9 @@ class Coverage9 implements Implementation {
     }
   }
 
-  /** Creates a new coverage implementation for php-code-coverage >= 9.0 */
-  public function __construct() {
-    $this->filter= new Filter();
-    $this->backing= new CodeCoverage((new Selector())->forLineCoverage($this->filter), $this->filter);
+  /** Creates a new backing instance */
+  protected function newInstance(): CodeCoverage {
+    return new CodeCoverage((new Selector())->forLineCoverage($this->filter), $this->filter);
   }
 
   /**
@@ -52,25 +49,6 @@ class Coverage9 implements Implementation {
     return !$this->filter->isEmpty();
   }
 
-  /**
-   * Starts coverage
-   *
-   * @param  string $name
-   * @return void
-   */
-  public function start($name) {
-    $this->backing->start($name);
-  }
-
-  /**
-   * Stops coverage
-   *
-   * @return void
-   */
-  public function stop() {
-    $this->backing->stop();
-  }
-
   /** @return unittest.coverage.impl.Report */
   public function report() {
     $report= $this->backing->getReport();
@@ -79,25 +57,5 @@ class Coverage9 implements Implementation {
       $report->numberOfExecutableLines(),
       $report->classes()
     );
-  }
-
-  /**
-   * Writes HTML
-   *
-   * @param  string $folder
-   * @return void
-   */
-  public function writeHtml($folder) {
-    (new Facade())->process($this->backing, $folder);
-  }
-
-  /**
-   * Writes Clover file
-   *
-   * @param  string $file
-   * @return void
-   */
-  public function writeClover($file) {
-    (new Clover())->process($this->backing, $file);
   }
 }

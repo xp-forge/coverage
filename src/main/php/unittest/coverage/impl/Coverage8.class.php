@@ -1,16 +1,13 @@
 <?php namespace unittest\coverage\impl;
 
-use SebastianBergmann\CodeCoverage\Report\Clover;
-use SebastianBergmann\CodeCoverage\Report\Html\Facade;
-use SebastianBergmann\CodeCoverage\{CodeCoverage, Filter};
+use SebastianBergmann\CodeCoverage\CodeCoverage;
 
-class Coverage8 implements Implementation {
-  private $filter, $backing;
+/** Coverage implementation for php-code-coverage < 9.0 */
+class Coverage8 extends Implementation {
 
-  /** Creates a new coverage implementation for php-code-coverage < 9.0 */
-  public function __construct() {
-    $this->filter= new Filter();
-    $this->backing= new CodeCoverage(null, $this->filter);
+  /** Creates a new backing instance */
+  protected function newInstance(): CodeCoverage {
+    return new CodeCoverage(null, $this->filter);
   }
 
   /**
@@ -32,25 +29,6 @@ class Coverage8 implements Implementation {
     return $this->filter->hasWhitelist();
   }
 
-  /**
-   * Starts coverage
-   *
-   * @param  string $name
-   * @return void
-   */
-  public function start($name) {
-    $this->backing->start($name);
-  }
-
-  /**
-   * Stops coverage
-   *
-   * @return void
-   */
-  public function stop() {
-    $this->backing->stop();
-  }
-
   /** @return unittest.coverage.impl.Report */
   public function report() {
     $report= $this->backing->getReport();
@@ -59,25 +37,5 @@ class Coverage8 implements Implementation {
       $report->getNumExecutableLines(),
       $report->getClasses()
     );
-  }
-
-  /**
-   * Writes HTML
-   *
-   * @param  string $folder
-   * @return void
-   */
-  public function writeHtml($folder) {
-    (new Facade())->process($this->backing, $folder);
-  }
-
-  /**
-   * Writes Clover file
-   *
-   * @param  string $file
-   * @return void
-   */
-  public function writeClover($file) {
-    (new Clover())->process($this->backing, $file);
   }
 }
