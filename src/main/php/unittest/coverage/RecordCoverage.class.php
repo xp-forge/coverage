@@ -53,10 +53,6 @@ class RecordCoverage implements Listener {
    * @param io.streams.OutputStreamWriter out
    */
   public function __construct() {
-    if (!Runtime::getInstance()->extensionAvailable('xdebug')) {
-      throw new PrerequisitesNotMetError('code coverage not available. Please install the xdebug extension.'); // @codeCoverageIgnore 
-    }
-
     $this->coverage= Coverage::newInstance();
   }
 
