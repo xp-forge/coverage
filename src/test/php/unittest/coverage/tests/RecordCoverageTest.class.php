@@ -33,18 +33,18 @@ class RecordCoverageTest extends TestCase {
   }
 
   #[Test]
-  public function html_report() {
+  public function html_export() {
     $c= new RecordCoverage();
     $c->setHtmlReportDirectory('coverage-report');
 
-    $this->assertTrue(array_key_exists('coverage-report/index.html', $c->reports()));
+    $this->assertTrue(array_key_exists('coverage-report/index.html', $c->exports()));
   }
 
   #[Test]
-  public function clover_report() {
+  public function clover_export() {
     $c= new RecordCoverage();
     $c->setCloverFile('clover.xml');
 
-    $this->assertTrue(array_key_exists('clover.xml', $c->reports()));
+    $this->assertTrue(array_key_exists('clover.xml', $c->exports()));
   }
 }

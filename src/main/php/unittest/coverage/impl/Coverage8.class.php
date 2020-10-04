@@ -1,5 +1,7 @@
 <?php namespace unittest\coverage\impl;
 
+use SebastianBergmann\CodeCoverage\Report\Clover;
+use SebastianBergmann\CodeCoverage\Report\Html\Facade;
 use SebastianBergmann\CodeCoverage\{CodeCoverage, Filter};
 
 class Coverage8 implements Implementation {
@@ -37,7 +39,7 @@ class Coverage8 implements Implementation {
    * @return void
    */
   public function start($name) {
-    $this->backing->start($name);  // @codeCoverageIgnore
+    $this->backing->start($name);
   }
 
   /**
@@ -49,7 +51,7 @@ class Coverage8 implements Implementation {
     $this->backing->stop();
   }
 
-  /** @return unittest.coerage.impl.Report */
+  /** @return unittest.coverage.impl.Report */
   public function report() {
     $report= $this->backing->getReport();
     return new Report(
@@ -57,5 +59,25 @@ class Coverage8 implements Implementation {
       $report->getNumExecutableLines(),
       $report->getClasses()
     );
+  }
+
+  /**
+   * Writes HTML
+   *
+   * @param  string $folder
+   * @return void
+   */
+  public function writeHtml($folder) {
+    (new Facade())->process($this->backing, $folder);
+  }
+
+  /**
+   * Writes Clover file
+   *
+   * @param  string $file
+   * @return void
+   */
+  public function writeClover($file) {
+    (new Clover())->process($this->backing, $file);
   }
 }

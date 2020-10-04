@@ -8,17 +8,17 @@ use unittest\metrics\Metric;
  * @test  xp://unittest.coverage.tests.CoverageDetailsTest
  */
 class CoverageDetails extends Metric {
-  private $report, $reports;
+  private $report, $exports;
 
   /**
    * Creates a new detailled coverage instance
    *
    * @param  unittest.coverage.impl.Report $report
-   * @param  string[] $reports
+   * @param  string[] $exports
    */
-  public function __construct($report, $reports) {
+  public function __construct($report, $exports) {
     $this->report= $report;
-    $this->reports= $reports;
+    $this->exports= $exports;
   }
 
   /** @return void */
@@ -37,7 +37,7 @@ class CoverageDetails extends Metric {
       $percent,
       $this->report->executed(),
       $this->report->executable(),
-      $this->reports ? " > \033[36;4m".implode(' & ', $this->reports)."\033[0m" : ''
+      $this->exports ? " > \033[36;4m".implode(' & ', $this->exports)."\033[0m" : ''
     );
 
     // Details by class
@@ -64,6 +64,6 @@ class CoverageDetails extends Metric {
 
   /** @return var */
   protected function value() {
-    return $this->executed / $this->executable * 100;
+    return $this->report->executed() / $this->report->executable() * 100;
   }
 }
