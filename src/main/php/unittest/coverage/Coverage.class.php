@@ -9,6 +9,7 @@ use unittest\coverage\impl\{Coverage8, Coverage9};
 abstract class Coverage {
   private static $impl;
 
+  /** @codeCoverageIgnore */
   static function __static() {
     self::$impl= class_exists(Selector::class) ? Coverage9::class : Coverage8::class;
   }
