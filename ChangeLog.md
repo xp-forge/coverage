@@ -3,6 +3,13 @@ Coverage change log
 
 ## ?.?.? / ????-??-??
 
+## 1.1.0 / 2020-10-04
+
+* Merged PR #10: Upgrade phpunit/php-code-coverage to version 9.0+. This
+  makes this library compatible with PHP 8 (see #9), while also keeping
+  support for PHP 7.0, 7.1 and 7.2 by supporting older library versions.
+  (@thekid)
+
 ## 1.0.1 / 2020-04-05
 
 * Made compatible with XP 10 - @thekid
