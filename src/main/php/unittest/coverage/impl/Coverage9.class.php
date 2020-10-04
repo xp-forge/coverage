@@ -7,6 +7,7 @@ use SebastianBergmann\CodeCoverage\Driver\Selector;
 /** Coverage implementation for php-code-coverage >= 9.0 */
 class Coverage9 extends Implementation {
 
+  /** @codeCoverageIgnore */
   static function __static() {
 
     // Workaround for fatal error in php-code-coverage when PHPUnit is not loaded
