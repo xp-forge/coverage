@@ -27,6 +27,11 @@ class Coverage8 implements Implementation {
   }
 
   public function report() {
-    return $this->backing->getReport();
+    $report= $this->backing->getReport();
+    return new Report(
+      $report->getNumExecutedLines(),
+      $report->getNumExecutableLines(),
+      $report->getClasses()
+    );
   }
 }
