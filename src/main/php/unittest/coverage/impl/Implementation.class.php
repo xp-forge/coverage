@@ -38,7 +38,7 @@ abstract class Implementation {
    * @return void
    */
   public function start($name) {
-    $this->backing->start($name);
+    $this->backing->start($name); // @codeCoverageIgnore
   }
 
   /**
