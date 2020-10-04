@@ -8,65 +8,58 @@ use unittest\metrics\Metric;
  * @test  xp://unittest.coverage.tests.CoverageDetailsTest
  */
 class CoverageDetails extends Metric {
-  private $coverage, $reports, $executed, $executable, $classes;
+  private $report, $exports, $percent;
 
   /**
    * Creates a new detailled coverage instance
    *
-   * @param  SebastianBergmann.CodeCoverage.CodeCoverage $coverage
-   * @param  string[] $reports
+   * @param  unittest.coverage.impl.Report $report
+   * @param  string[] $exports
    */
-  public function __construct($coverage, $reports) {
-    $this->coverage= $coverage;
-    $this->reports= $reports;
+  public function __construct($report, $exports) {
+    $this->report= $report;
+    $this->exports= $exports;
   }
 
   /** @return void */
   protected function calculate() {
-    $report= $this->coverage->getReport();
-    $this->executed= $report->getNumExecutedLines();
-    $this->executable= $report->getNumExecutableLines();
-    $this->classes= $report->getClasses();
+    $executed= $this->report->executed();
+    $executable= $this->report->executable();
+    $this->percent= 0 === $executable ? 0.0 : min(100.0, $executed / $executable * 100.0);
   }
 
   /** @return string */
   protected function format() {
-
-    // Summary
-    $percent= $this->executed / $this->executable * 100;
+    $percent= $this->value();
     $s= sprintf(
       "%s%.2f%%\033[0m lines covered (%d/%d)%s\n\n",
       $percent < 50.0 ? "\033[31;1m" : ($percent < 90.0 ? "\033[33;1m" : "\033[32;1m"),
       $percent,
-      $this->executed,
-      $this->executable,
-      $this->reports ? " > \033[36;4m".implode(' & ', $this->reports)."\033[0m" : ''
+      $this->report->executed(),
+      $this->report->executable(),
+      $this->exports ? " > \033[36;4m".implode(' & ', $this->exports)."\033[0m" : ''
     );
 
-    // Details by class
     $s.= "┌──────────────────────────────────────────────────────┬─────────┬──────┐\n";
     $s.= "│ Class                                                │ % Lines │  Not │\n";
     $s.= "╞══════════════════════════════════════════════════════╪═════════╪══════╡\n";
-    foreach ($this->classes as $name => $details) {
+    foreach ($this->report->summary() as $class => $details) {
       $percent= $details['coverage'];
       $color= $percent < 50.0 ? "\033[31;1m" : ($percent < 90.0 ? "\033[33;1m" : "\033[32;1m");
       $uncovered= $details['executableLines'] - $details['executedLines'];
 
       $s.= sprintf(
         "│ %-52s │ %s%6.2f%%\033[0m │ %4s │\n",
-        (new ClassName($name))->shortenedTo(52),
+        (new ClassName($class))->shortenedTo(52),
         $color,
         $percent,
         $uncovered ?: ''
       );
     }
-
     $s.= "└──────────────────────────────────────────────────────┴─────────┴──────┘";
     return $s;
   }
 
   /** @return var */
-  protected function value() {
-    return $this->executed / $this->executable * 100;
-  }
+  protected function value() { return $this->percent; }
 }

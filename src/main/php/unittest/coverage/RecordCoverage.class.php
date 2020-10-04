@@ -1,8 +1,5 @@
 <?php namespace unittest\coverage;
 
-use SebastianBergmann\CodeCoverage\CodeCoverage;
-use SebastianBergmann\CodeCoverage\Report\Clover;
-use SebastianBergmann\CodeCoverage\Report\Html\Facade;
 use lang\Runtime;
 use unittest\{
   Arg,
@@ -26,27 +23,27 @@ use unittest\{
  */
 class RecordCoverage implements Listener {
   private $coverage, $covering;
-  private $reports= [];
+  private $exports= [];
 
   /** Register a path to include in coverage report */
   #[Arg]
   public function setRegisterPath(string $path) {
-    $this->coverage->filter()->addDirectoryToWhitelist($path);
+    $this->coverage->target($path);
   }
 
   /** Set directory to write html report to. */
   #[Arg]
   public function setHtmlReportDirectory(string $htmlReportDirectory) {
-    $this->reports[$htmlReportDirectory.'/index.html']= function($coverage) use($htmlReportDirectory) {
-      (new Facade())->process($coverage, $htmlReportDirectory);
+    $this->exports[$htmlReportDirectory.'/index.html']= function() use($htmlReportDirectory) {
+      $this->coverage->writeHtml($htmlReportDirectory);
     };
   }
 
   /** Write clover report to specified file. */
   #[Arg]
   public function setCloverFile(string $cloverFile) {
-    $this->reports[$cloverFile]= function($coverage) use($cloverFile) {
-      (new Clover())->process($coverage, $cloverFile);
+    $this->exports[$cloverFile]= function() use($cloverFile) {
+      $this->coverage->writeClover($cloverFile);
     };
   }
 
@@ -56,18 +53,14 @@ class RecordCoverage implements Listener {
    * @param io.streams.OutputStreamWriter out
    */
   public function __construct() {
-    if (!Runtime::getInstance()->extensionAvailable('xdebug')) {
-      throw new PrerequisitesNotMetError('code coverage not available. Please install the xdebug extension.');
-    }
-
-    $this->coverage= new CodeCoverage();
+    $this->coverage= Coverage::newInstance();
   }
 
   /** @return SebastianBergmann.CodeCoverage.CodeCoverage */
   public function coverage() { return $this->coverage; }
 
   /** @return [:var] */
-  public function reports() { return $this->reports; }
+  public function exports() { return $this->exports; }
 
   /**
    * Called when a test case starts.
@@ -154,10 +147,10 @@ class RecordCoverage implements Listener {
   public function testRunFinished(TestSuite $suite, TestResult $result) {
     $this->covering && $this->coverage->stop();
 
-    foreach ($this->reports as $report) {
-      $report($this->coverage);
+    foreach ($this->exports as $export) {
+      $export();
     }
 
-    $result->metric('Coverage', new CoverageDetails($this->coverage, array_keys($this->reports)));
+    $result->metric('Coverage', new CoverageDetails($this->coverage->report(), array_keys($this->exports)));
   }
 }
