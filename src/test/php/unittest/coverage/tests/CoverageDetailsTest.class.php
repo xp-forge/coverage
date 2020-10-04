@@ -1,29 +1,58 @@
 <?php namespace unittest\coverage\tests;
 
-use SebastianBergmann\CodeCoverage\CodeCoverage;
 use unittest\coverage\CoverageDetails;
+use unittest\coverage\impl\Report;
 use unittest\{Test, TestCase, Values, Ignore};
 
 class CoverageDetailsTest extends TestCase {
 
-  #[Test, Ignore('Need to figure out how to create CodeCoverage with coverage data programmatically')]
+  #[Test]
   public function can_create() {
-    new CoverageDetails(new CodeCoverage(), []);
+    new CoverageDetails(new Report(0, 0, []), []);
   }
 
-  #[Test, Ignore('Need to figure out how to create CodeCoverage with coverage data programmatically'), Values([[[1 => []], 0.0], [[1 => ['test']], 100.0], [[1 => [], 2 => ['test']], 50.0], [[1 => [], 2 => ['test'], 3 => null], 50.0],])]
-  public function calculated($lines, $expected) {
-    $coverage= new CodeCoverage();
-    $coverage->setData([__FILE__ => $lines]);
-
-    $this->assertEquals($expected, (float)(new CoverageDetails($coverage->getReport(), []))->calculated());
+  #[Test, Values([[0, 0, 0.0], [1, 2, 50.0], [2, 2, 100.0], [3, 2, 100.0]])]
+  public function calculated($executed, $executable, $expected) {
+    $report= new Report($executed, $executable, []);
+    $this->assertEquals($expected, (new CoverageDetails($report, []))->calculated());
   }
 
-  #[Test, Ignore('Need to figure out how to create CodeCoverage with coverage data programmatically')]
+  #[Test]
   public function formatted() {
-    $coverage= new CodeCoverage();
-    $coverage->setData([__FILE__ => [1 => ['test']]]);
-
-    $this->assertNotEquals('', (new CoverageDetails($coverage->getReport(), []))->formatted());
+    $report= new Report(100, 100, [
+      'xp\coverage\Runner' => [
+        'className' => 'xp\coverage\Runner',
+        'methods'         => [
+          'main' => [
+            'methodName'      => 'main',
+            'visibility'      => 'public',
+            'signature'       => 'main(array $args)',
+            'startLine'       => 30,
+            'endLine'         => 74,
+            'executableLines' => 29,
+            'executedLines'   => 0,
+            'ccn'             => 9,
+            'coverage'        => 0,
+            'crap'            => '90',
+            'link'            => 'xp/coverage/Runner.class.php.html#30',
+          ]
+        ],
+        'startLine'       => 27,
+        'executableLines' => 29,
+        'executedLines'   => 0,
+        'ccn'             => 9,
+        'coverage'        => 0,
+        'crap'            => '90',
+        'package'         => [
+          'namespace'   => 'xp\coverage',
+          'fullPackage' => '',
+          'category'    => '',
+          'package'     => '',
+          'subpackage'  => '',
+        ],
+        'link' => "xp/coverage/Runner.class.php.html#27",
+      ]
+    ]);
+    $this->assertNotEquals('', (new CoverageDetails($report, []))->formatted());
   }
 }

@@ -8,7 +8,7 @@ use unittest\metrics\Metric;
  * @test  xp://unittest.coverage.tests.CoverageDetailsTest
  */
 class CoverageDetails extends Metric {
-  private $report, $exports;
+  private $report, $exports, $percent;
 
   /**
    * Creates a new detailled coverage instance
@@ -23,14 +23,14 @@ class CoverageDetails extends Metric {
 
   /** @return void */
   protected function calculate() {
-    /* NOOP */
+    $executed= $this->report->executed();
+    $executable= $this->report->executable();
+    $this->percent= 0 === $executable ? 0.0 : min(100.0, $executed / $executable * 100.0);
   }
 
   /** @return string */
   protected function format() {
-
-    // Summary
-    $percent= $this->report->executed() / $this->report->executable() * 100;
+    $percent= $this->value();
     $s= sprintf(
       "%s%.2f%%\033[0m lines covered (%d/%d)%s\n\n",
       $percent < 50.0 ? "\033[31;1m" : ($percent < 90.0 ? "\033[33;1m" : "\033[32;1m"),
@@ -40,7 +40,6 @@ class CoverageDetails extends Metric {
       $this->exports ? " > \033[36;4m".implode(' & ', $this->exports)."\033[0m" : ''
     );
 
-    // Details by class
     $s.= "┌──────────────────────────────────────────────────────┬─────────┬──────┐\n";
     $s.= "│ Class                                                │ % Lines │  Not │\n";
     $s.= "╞══════════════════════════════════════════════════════╪═════════╪══════╡\n";
@@ -57,13 +56,10 @@ class CoverageDetails extends Metric {
         $uncovered ?: ''
       );
     }
-
     $s.= "└──────────────────────────────────────────────────────┴─────────┴──────┘";
     return $s;
   }
 
   /** @return var */
-  protected function value() {
-    return $this->report->executed() / $this->report->executable() * 100;
-  }
+  protected function value() { return $this->percent; }
 }
