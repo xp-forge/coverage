@@ -56,7 +56,7 @@ class CoverageListener implements TestListener {
    */
   public function __construct() {
     if (!Runtime::getInstance()->extensionAvailable('xdebug')) {
-      throw new PrerequisitesNotMetError('Code coverage not available. Please install the xdebug extension.');
+      throw new PrerequisitesNotMetError('Code coverage not available. Please install the xdebug extension.'); // @codeCoverageIgnore 
     }
 
     $this->coverage= Coverage::newInstance();
