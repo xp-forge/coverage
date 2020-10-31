@@ -7,8 +7,6 @@ Coverage change log
 
 * Removed workaround for sebastianbergmann/php-code-coverage#820 after
   it has been fixed there.
-* Removed workaround for phpunit/php-code-coverage#820 after it has been
-  fixed there.
   (@thekid)
 
 ## 1.1.0 / 2020-10-04
