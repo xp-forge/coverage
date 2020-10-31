@@ -3,6 +3,12 @@ Coverage change log
 
 ## ?.?.? / ????-??-??
 
+## 1.1.1 / 2020-10-31
+
+* Removed workaround for phpunit/php-code-coverage#820 after it has been
+  fixed there.
+  (@thekid)
+
 ## 1.1.0 / 2020-10-04
 
 * Merged PR #10: Upgrade phpunit/php-code-coverage to version 9.0+. This
