@@ -3,6 +3,10 @@ Coverage change log
 
 ## ?.?.? / ????-??-??
 
+## 1.1.2 / 2021-10-21
+
+* Made library compatible with XP 11 - @thekid
+
 ## 1.1.1 / 2020-10-31
 
 * Removed workaround for sebastianbergmann/php-code-coverage#820 after

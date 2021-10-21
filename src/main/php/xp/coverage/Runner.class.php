@@ -39,7 +39,9 @@ class Runner {
     // Generate arguments to `xp test`
     $path= false;
     for ($i= 0, $s= sizeof($args); $i < $s; $i++) {
-      if ('-p' === $args[$i]) {
+      if ('-o' === $args[$i]) {
+        array_unshift($pass, '-o', $args[++$i]);
+      } else if ('-p' === $args[$i]) {
         $pass[]= '-o';
         $pass[]= 'registerpath';
         $pass[]= $args[++$i];
